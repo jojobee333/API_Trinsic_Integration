@@ -1,0 +1,11 @@
+AUTH_TOKEN=
+ECOSYSTEM_ID=
+EMAIL=
+SAMPLE_DID=
+WALLET_TAG=wallet
+CREDENTIAL_TAG=credential
+TEMPLATE_TAG=template
+TRUST_REGISTRY_TAG=trust_registry
+IDENTITY_TAG=identity
+AUTH_TAG=authenticate
+PROOF_TAG=proof
