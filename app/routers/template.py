@@ -1,14 +1,15 @@
-from app.models.constants import *
+from app.constants import *
 from app.models.models import TemplateInfo
 
 router = APIRouter()
 
 
 @router.get('/template/search', tags=[template_tag])
-async def search_for_template() -> dict:
+async def search_for_template(query: str = None) -> dict:
     """This function will return all templates from base wallet. Needs query specification added at the moment."""
     # API working |
-    request = SearchCredentialTemplatesRequest(query=f"SELECT * FROM c")
+    query = "." + query if query else None
+    request = SearchCredentialTemplatesRequest(query=f"SELECT * FROM c{query}")
     try:
         response = await trinsic.template.search(request=request)
         return {"response": json.loads(response.items_json)}

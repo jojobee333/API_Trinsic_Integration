@@ -14,13 +14,13 @@ apple = ["firstName", ["lastName"], ["locationName"]]
 ticketing_schema_template = CreateCredentialTemplateRequest(
     name=f"Ticketing Sample",
     title="Example Credential",
-    description="A credential for Trinsic's SDK samples",
+    description="A json_object for Trinsic's SDK samples",
     allow_additional_fields=True,
     fields={
         "firstName": TemplateField(title="First Name", description="Given name of holder"),
         "lastName": TemplateField(title="Last Name", description="Surname of holder", ),
         "ticketNumber": TemplateField(title="Ticket Number", description="Issued Ticket Number", type=FieldType.NUMBER),
-        "credType": TemplateField(title="Type", description="The type of credential", ),
+        "credType": TemplateField(title="Type", description="The type of json_object", ),
         "eventName": TemplateField(title="Event Name", description="Name of Event", ),
         "locationName": TemplateField(title="Location Name", description="Name of location", ),
         "locationAddress": TemplateField(title="Location Address", description="Address of location", ),

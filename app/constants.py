@@ -19,7 +19,7 @@ from trinsic.proto.services.universalwallet.v1 import IdentityProvider, AddExter
 
 from dotenv import load_dotenv
 
-load_dotenv("../../trins.env")
+load_dotenv("../trins.env")
 base_token = os.getenv("AUTH_TOKEN")
 ecosystem_id = os.getenv("ECOSYSTEM_ID")
 email = os.getenv("EMAIL")

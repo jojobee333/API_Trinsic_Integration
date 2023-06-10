@@ -1,15 +1,16 @@
-from app.models.constants import *
+from app.constants import *
+from app.models.models import JsonObject
 
 router = APIRouter()
 
 
 @router.post('/credential/issue', tags=[cred_tag])
-async def issue_credential_from_template(auth_token: str, cred_dict: dict, template_id: str)-> dict:
-    """Takes a required wallet token, a json object, and a template id."""
+async def issue_credential_from_template(auth_token: str, template_id: str, credential: JsonObject) -> dict:
+    """Takes a required wallet token, a json_object object, and a template id."""
     trinsic_wallet = TrinsicService(server_config=trinsic_config(auth_token=auth_token))
     request = IssueFromTemplateRequest(
         template_id=template_id,
-        values_json=json.dumps(cred_dict)
+        values_json=json.dumps(credential.json_object)
     )
     try:
         issue_response = await trinsic_wallet.credential.issue_from_template(request=request)
@@ -20,11 +21,11 @@ async def issue_credential_from_template(auth_token: str, cred_dict: dict, templ
 
 
 @router.post("/credential/proof/create", tags=[cred_tag])
-async def create_proof(wallet_auth_token: str, reveal_template: list, cred_json: dict) -> dict:
+async def create_proof(wallet_auth_token: str, attributes: JsonObject, reveal_template: list) -> dict:
     # API | Working
     trinsic_wallet = TrinsicService(server_config=trinsic_config(auth_token=wallet_auth_token))
     reveal_template = RevealTemplateAttributes(template_attributes=reveal_template)
-    request = CreateProofRequest(document_json=json.dumps(cred_json), reveal_template=reveal_template)
+    request = CreateProofRequest(document_json=json.dumps(attributes.json_object), reveal_template=reveal_template)
     try:
         trinsic_response = await trinsic_wallet.credential.create_proof(request=request)
         return {"response": json.loads(trinsic_response.proof_document_json)}

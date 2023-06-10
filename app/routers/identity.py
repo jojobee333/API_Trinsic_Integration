@@ -1,4 +1,4 @@
-from app.models.constants import *
+from app.constants import *
 
 router = APIRouter()
 
@@ -16,6 +16,7 @@ async def add_identity_initial(identity: str, wallet_auth_token: str) -> dict:
     except Exception as e:
         error_message = f"Failed to initialize external identity: {str(e)}"
         raise HTTPException(status_code=status_code, detail=error_message)
+
 
 @router.post('/add-identity/confirm', tags=[identity_tag])
 async def add_identity_confirm(code: str, wallet_auth_token: str, challenge: str) -> dict:
@@ -41,5 +42,3 @@ async def remove_identity(identity: str) -> dict:
     except Exception as e:
         error_message = f"Failed to remove external identity: {str(e)}"
         raise HTTPException(status_code=status_code, detail=error_message)
-
-

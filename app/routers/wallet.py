@@ -1,8 +1,8 @@
 from trinsic.proto.services.universalwallet.v1 import DeleteItemRequest
-from app.models.constants import *
+from app.constants import *
+from app.models.models import JsonObject
 
 router = APIRouter()
-
 
 @router.post('/wallet/create', tags=[wallet_tag])
 async def create_sub_wallet() -> dict:
@@ -21,12 +21,13 @@ async def create_sub_wallet() -> dict:
 
 
 @router.get('/wallet/search', tags=[wallet_tag])
-async def search_wallet(wallet_auth_token: str, query: str = "c") -> dict:
+async def search_wallet(wallet_auth_token: str, query: str = None) -> dict:
     """Return items from specified wallet."""
     # API working |
+    query = "." + query if query else None
     trinsic_wallet = TrinsicService(server_config=trinsic_config(auth_token=wallet_auth_token))
     try:
-        request = SearchRequest(query=f"SELECT * FROM {query}")
+        request = SearchRequest(query=f"SELECT * FROM c{query}")
         wallet_items = await trinsic_wallet.wallet.search_wallet(request=request)
         items = [json.loads(item) for item in wallet_items.items]
         return {"wallet_items": items}
@@ -36,15 +37,15 @@ async def search_wallet(wallet_auth_token: str, query: str = "c") -> dict:
 
 
 @router.post('/wallet/item/insert', tags=[wallet_tag])
-async def insert_item(document_json: dict, wallet_auth_token: str) -> dict:
-    """Takes Credential and Auth Token of a wallet and inserts a credential into a wallet. Please pass the credential
+async def insert_item(document_json: JsonObject, wallet_auth_token: str) -> dict:
+    """Takes Credential and Auth Token of a wallet and inserts a json_object into a wallet. Please pass the json_object
     into the request body."""
     # working
     trinsic_wallet = TrinsicService(server_config=trinsic_config(auth_token=wallet_auth_token))
     try:
-        request = InsertItemRequest(item_json=json.dumps(document_json), item_type="VerifiableCredential")
+        request = InsertItemRequest(item_json=json.dumps(document_json.json_object), item_type="VerifiableCredential")
         trinsic_response = await trinsic_wallet.wallet.insert_item(request=request)
-        return {"item_id": json.loads(trinsic_response.item_id)}
+        return {"item_id": trinsic_response.item_id}
     except Exception as e:
         error_message = f"Failed to insert item: " + str(e)
         raise HTTPException(status_code=status_code, detail=error_message)

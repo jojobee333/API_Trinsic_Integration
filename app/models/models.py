@@ -24,3 +24,6 @@ class GovernanceFramework(BaseModel):
     name: str
     description: str
     uri: str
+
+class JsonObject(BaseModel):
+    json_object: dict
